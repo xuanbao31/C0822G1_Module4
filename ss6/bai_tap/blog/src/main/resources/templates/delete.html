@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+          crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+<h2>Blog Bạn Muốn Xóa</h2>
+<form action="/blog/deleteBlog" method="post" th:object="${blog}">
+  <table class="table table-success">
+    <tr>
+      <th>Tên Tác Giả</th>
+      <th>Tên Tác Phẩm</th>
+      <th>Ngày Sản Xuất</th>
+      <th>Thể Loại</th>
+    </tr>
+    <tr>
+      <td hidden><input type="text" th:field="*{id}"/></td>
+      <td th:text="${blog.name}"></td>
+      <td th:text="${blog.nameBook}"></td>
+      <td th:text="${blog.date}"></td>
+      <td th:text="${blog.category.name}"></td>
+    </tr>
+
+  </table>
+  <input type="submit" class="btn btn-danger" placeholder="Delete">
+</form>
+
+
+</body>
+</html>

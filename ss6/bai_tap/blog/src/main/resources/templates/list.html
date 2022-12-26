@@ -27,6 +27,7 @@
         <th>Tên Tác Phẩm</th>
         <th>Ngày Sản Xuất</th>
         <th>Delete</th>
+        <th>Edit</th>
     </tr>
     <tr th:each="blog,var:${blogs}">
         <td th:text="${var.count}"></td>
@@ -34,6 +35,7 @@
         <td th:text="${blog.nameBook}"></td>
         <td th:text="${blog.date}"></td>
         <td><a th:href="@{/blog/{id}/delete(id=${blog.id})}">Delete</a></td>
+        <td><a th:href="@{/blog/{id}/edit(id=${blog.id})}">Edit</a></td>
 
     </tr>
 </table>

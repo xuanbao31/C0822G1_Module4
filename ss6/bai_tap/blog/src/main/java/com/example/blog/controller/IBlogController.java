@@ -55,4 +55,18 @@ public class IBlogController {
         blogService.save(blog);
         return "redirect:/blog/list";
     }
+
+    @GetMapping("{id}/edit")
+    public String showFormEdit(Model model, @PathVariable int id) {
+        model.addAttribute("blogs", blogService.findById(id));
+        model.addAttribute("category", categoryService.findAll());
+        return "/edit";
+    }
+
+    @PostMapping("/edit")
+    public String saveEdit(Blog blog, RedirectAttributes redirectAttributes) {
+        blogService.save(blog);
+        redirectAttributes.addAttribute("message", "Thêm Mới Thành Công");
+        return "redirect:blog/list";
+    }
 }

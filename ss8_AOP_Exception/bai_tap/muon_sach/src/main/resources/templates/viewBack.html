@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/return" method="post">
+    <p>Nhap ma so muon sach: </p>
+    <input type="number" name="borrowCode">
+    <input hidden type="text" th:value="${idBook}" name="idBook">
+    <button type="submit">Tra sach</button>
+</form>
+
+</body>
+</html>

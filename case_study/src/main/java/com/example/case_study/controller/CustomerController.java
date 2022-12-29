@@ -26,6 +26,8 @@ public class CustomerController {
     @Autowired
     private ICustomerTypeService customerTypeService;
 
+
+
     @GetMapping("/list")
     public String showAndSearch(@PageableDefault(value = 4) Pageable pageable, @RequestParam(value = "name", defaultValue = "") String name,
                                 @RequestParam(value = "email", defaultValue = "") String email,
@@ -54,7 +56,7 @@ public class CustomerController {
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
             model.addAttribute("customerType", customerTypeService.findAll());
-            return "create";
+            return "/customer/create";
         } else {
             Customer customer = new Customer();
             System.out.println(customerDto);

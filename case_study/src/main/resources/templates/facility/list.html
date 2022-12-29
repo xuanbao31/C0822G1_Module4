@@ -9,9 +9,7 @@
 
 </head>
 <body>
-
-<a class="btn btn-black" href="/facility/create">Add To Facility List</a>
-
+<a href="/facility/create" class="btn btn-primary">Add To Facility</a>
 <h1 style="text-align: center">Facility List</h1>
 <form th:action="@{/facility/list}" method="get">
     <input th:type="text" name="name" placeholder="searchName" th:value="${name}">
@@ -27,7 +25,7 @@
         <th>MaxPeople</th>
         <th>RentType</th>
         <th>FacilityType</th>
-<!--        <th>Edit</th>-->
+        <th>Edit</th>
         <th>Delete</th>
     </tr>
     <tr th:each="facilities,var:${facility}">
@@ -38,7 +36,7 @@
         <td th:text="${facilities.maxPeople}"></td>
         <td th:text="${facilities.rentType.name}"></td>
         <td th:text="${facilities.facilityType.name}"></td>
-<!--        <td><a class="btn btn-primary" th:href="@{/facility/{id}/edit(id=${facilities.id})}">Edit</a></td>-->
+        <td><a class="btn btn-primary" th:href="@{/facility/{id}/edit(id=${facilities.id})}">Edit</a></td>
         <td>
             <button th:attr="onclick=|deleteFacility('${facilities.name}' ,'${facilities.id}')|"
                     class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalDelete">

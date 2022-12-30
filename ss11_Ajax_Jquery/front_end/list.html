@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+<h1>Blog</h1>
+<h1>Blog List</h1>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalCreate">
+    Create
+</button>
+<input type="text" id="search">
+<button id="searchbtn">Search</button>
+<button id="moreSearch"> More</button>
+<table  class="table">
+
+    <thead>
+    <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Producer</th>
+        <th>Price</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr>
+        <td>
+            <span>Loading</span>
+        </td>
+    </tr>
+    </tbody>
+
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" >Create Student</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">x</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="text" placeholder="input Name" id="txtName">
+                <input type="text" placeholder="input Price" id="txtPrice">
+                <input type="text" placeholder="input Producer" id="txtProducer">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnCreate">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="jquery-3.6.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+<script>
+    $(document).ready(function () {
+        function init() {
+            setTimeout(function () {
+                $("tbody").empty();
+                $.ajax({
+                    url:"http://localhost:8080/blog",
+                    type:"GET",
+                    dataType: "json",
+                    success: function (data) {
+                        let tr = [];
+                        for (let i = 0; i < data.length; i++) {
+                            tr.push("<tr>")
+                            tr.push("<td>" + data[i].id + "</td>");
+                            tr.push("<td>" + data[i].name + "</td>");
+                            tr.push("<td>" + data[i].producer + "</td>");
+                            tr.push("<td>" + data[i].price + "</td>");
+                            tr.push("</tr>")
+                        }
+                        $("tbody").append(tr.join(""));
+                    }
+                })
+            },2000);
+        }
+        init();
+        $("#btnCreate").click(function () {
+            console.log("OK")
+            let txtName = $("#txtName").val();
+            let txtProducer = $("#txtProducer").val();
+            let txtPrice = $("#txtPrice").val();
+
+            $.ajax({
+                url: "http://localhost:8080/blog",
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                data: JSON.stringify({'name':txtName,'price':txtPrice, 'producer':txtProducer}),
+                success:function () {
+                    $("#modalCreate").modal('hide');
+                    $("tbody").empty();
+                    $("tbody").append('Loading...');
+                    init();
+                }
+            })
+        })
+
+        $("#searchbtn").click(function () {
+            let  txtSearch = $("#search").val();
+            $.ajax({
+                url:"http://localhost:8080/blog/search?keyword="+txtSearch,
+                type:"GET",
+                dataType: "json",
+                success: function (data) {
+                    $("tbody").empty();
+                    let tr = [];
+                    for (let i = 0; i < data.length; i++) {
+                        tr.push("<tr>")
+                        tr.push("<td>" + data[i].id + "</td>");
+                        tr.push("<td>" + data[i].name + "</td>");
+                        tr.push("<td>" + data[i].producer + "</td>");
+                        tr.push("<td>" + data[i].price + "</td>");
+                        tr.push("</tr>")
+                    }
+                    $("tbody").append(tr.join(""));
+                }
+            })
+        })
+
+        $("#moreSearch").click(function () {
+            let pageNumber = parseInt($("#page").val());
+            $("#page").val(pageNumber + 1);
+            $.ajax({
+                url: "http://localhost:8080/blog?page=" + (pageNumber + 1)+
+                    "&nameSearch=" + $("#txt-search").val(),
+                type: "GET",
+                dataType: "json",
+                success: function (data) {
+                    let tr = [];
+                    if (data) {
+                        for (let i = 0; i < data.length; i++) {
+                            tr.push("<tr>")
+                            tr.push("<td>" + data[i].id + "</td>");
+                            tr.push("<td>" + data[i].name + "</td>");
+                            tr.push("<td>" + data[i].producer + "</td>");
+                            tr.push("<td>" + data[i].price + "</td>");
+                            tr.push("</tr>")
+                        }
+                    } else {
+                        tr.push("<tr>")
+                        tr.push("<td colspan='3'> No data ..... </td>")
+                        tr.push("</tr>")
+                        $("#moreSearch").hide();
+                    }
+                    $("tbody").append(tr.join(""));
+                }
+            })
+        })
+
+    })
+
+
+
+
+</script>
+</body>
+</html>

@@ -16,7 +16,9 @@ public class Customer {
     private int gender;
     @Column(unique = true)
     private String idCard;
+    @Column(unique = true)
     private String email;
+    @Column(unique = true)
     private String phoneNumber;
     private String address;
     private int status;

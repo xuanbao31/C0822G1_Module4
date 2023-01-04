@@ -10,23 +10,25 @@ import javax.validation.constraints.Pattern;
 
 public class CustomerDto implements Validator {
     private int id;
-
+    @NotBlank(message = "Không được để trống nha")
+    @Pattern(regexp = "([\\p{Lu}][\\p{Ll}]{1,8})(\\s([\\p{Lu}]|[\\p{Lu}][\\p{Ll}]{1,10})){0,5}$",
+            message = "Viết hoa ở mỗi chữ cái đầu")
     private String name;
-
+    @NotBlank(message = "Không được để trống nha")
     private String date;
 
-
     private Integer gender;
-
-
+    @NotBlank(message = "Không được để trống")
+    @Pattern(regexp = "^([0-9]{9}|[0-9]{12})$", message = "Nhập lại đi fen")
     private String idCard;
-
-
+    @NotBlank(message = "Không được để trống")
+    @Pattern(regexp = "^(090|091|\\\\(84\\\\)\\\\+90|\\\\(84\\\\)\\\\+91)[0-9]{7}$",
+            message = "Số điện thoại phải đủ 10 số và phải bắt đầu bằng 090 or 091")
     private String phoneNumber;
-
-
+    @Email(message = "Nhập đúng định dạng email")
     private String email;
-
+    @NotBlank(message = "Không được để trống")
+    @Email(message = "Nhập đúng định dạng email dùm đi Fen")
     private String address;
 
     private Integer status;

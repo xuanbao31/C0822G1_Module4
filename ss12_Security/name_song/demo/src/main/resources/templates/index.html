@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<a href="/create">Add to list</a>
+<table id="customers" th:unless="${song.isEmpty()}">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Singer</th>
+        <th>Kind</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="list : ${song}">
+        <td th:text="${list.getName()}"></td>
+        <td th:text="${list.getSinger()}"></td>
+        <td th:text="${list.getKind()}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

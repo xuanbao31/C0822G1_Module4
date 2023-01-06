@@ -1,9 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.model.contract.AttachFacility;
-import com.example.demo.model.contract.Contract;
-import com.example.demo.model.contract.ContractDetail;
-import com.example.demo.model.contract.ContractDto;
+import com.example.demo.model.contract.*;
 import com.example.demo.model.customer.Customer;
 import com.example.demo.model.facility.Facility;
 import com.example.demo.service.*;
@@ -15,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -66,23 +64,35 @@ public class ContractController {
 
     @GetMapping("")
     public String showListContract(@PageableDefault(value = 5) Pageable pageable, Model model) {
-        Page<Contract> contractPage = contractService.showList(pageable);
-        Page<ContractDto> contractDtoPage = contractPage.map(new Function<Contract, ContractDto>() {
-            @Override
-            public ContractDto apply(Contract contract) {
-                ContractDto contractDto = new ContractDto();
-                BeanUtils.copyProperties(contract, contractDto);
-                contractDto.getTotalcost();
-                return contractDto;
-            }
-        });
-        model.addAttribute("contracts", contractDtoPage);
-//        modelAndView.addObject("contractDetail",new ContractDetail());
-//        modelAndView.addObject("contractDto", new ContractDto());
+        Page<IContractDto> contractDtoPage = contractService.showListContractDto(pageable);
+        List<AttachFacility> attachFacilityList = attachFacilityService.findAll();
+        model.addAttribute("contractDtoPage", contractDtoPage);
+        model.addAttribute("attachFacilityList", attachFacilityList);
+        model.addAttribute("contract", new Contract());
+        model.addAttribute("customerPage", customerService.findAll());
+        model.addAttribute("facilityPage", facilityService.findAll());
+        model.addAttribute("contractDetail", new ContractDetail());
+        model.addAttribute("contractDetailList", contractDetailService.findAll());
+//        model.addAttribute("employeePage", employeeService.findAll(pageable));
+        return "contract/list";
+    }
 
-//        LocalDate minAge = LocalDate.now();
-//        model.addAttribute("minAge", minAge);
-
-        return "/contract/list";
+    @GetMapping("/add")
+    public String showFormCreate(Model model) {
+        model.addAttribute("contract", new Contract());
+        model.addAttribute("contractDto", new ContractDto());
+        model.addAttribute("facility", facilityService.findAll());
+        model.addAttribute("customer", customerService.findAll());
+        return "redirect:/contract";
+    }
+    @PostMapping("/save")
+    public String save(@ModelAttribute("contract") Contract contract, Model model) {
+        model.addAttribute("contract", new Contract());
+        model.addAttribute("contractDto", new ContractDto());
+        model.addAttribute("facility", facilityService.findAll());
+        model.addAttribute("customer", customerService.findAll());
+        model.addAttribute("mess", 1);
+        contractService.save(contract);
+        return "redirect:/contract";
     }
 }

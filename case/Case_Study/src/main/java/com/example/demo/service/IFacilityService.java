@@ -19,4 +19,6 @@ public interface IFacilityService {
     Page<Facility> findByName(Pageable pageable, String name);
 
     List<Facility> showList();
+
+    List<Facility> findAll();
 }

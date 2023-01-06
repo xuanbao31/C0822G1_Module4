@@ -1,6 +1,8 @@
 package com.example.demo.service;
 
 import com.example.demo.model.contract.Contract;
+import com.example.demo.model.contract.ContractDto;
+import com.example.demo.model.contract.IContractDto;
 import com.example.demo.repository.IContractRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,11 @@ public class ContractService implements IContractService {
     @Override
     public Page<Contract> showList(Pageable pageable) {
         return contractRepository.findAllContract(pageable);
+    }
+
+    @Override
+    public Page<IContractDto> showListContractDto(Pageable pageable) {
+        return contractRepository.findAllByContract(pageable);
     }
 
     @Override

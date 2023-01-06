@@ -20,4 +20,5 @@ public interface ICustomerService {
     List<Customer> showList();
 
     Page<Customer> findAllCustomerService(Pageable pageable);
+    List<Customer>findAll();
 }

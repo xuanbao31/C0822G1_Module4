@@ -1,10 +1,11 @@
-package com.example.case_study.controller;
+package com.example.demo.controller;
 
-import com.example.case_study.model.customer.Customer;
-import com.example.case_study.model.customer.CustomerDto;
-import com.example.case_study.model.customer.CustomerType;
-import com.example.case_study.service.ICustomerService;
-import com.example.case_study.service.ICustomerTypeService;
+import com.example.demo.model.customer.Customer;
+import com.example.demo.model.customer.CustomerDto;
+import com.example.demo.model.customer.CustomerType;
+import com.example.demo.service.IContractService;
+import com.example.demo.service.ICustomerService;
+import com.example.demo.service.ICustomerTypeService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -23,10 +25,16 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private ICustomerService customerService;
+
     @Autowired
     private ICustomerTypeService customerTypeService;
+    @Autowired
+    private IContractService contractService;
 
-
+    @ModelAttribute("customerTypes")
+    public List<CustomerType> getCustomerTypes() {
+        return customerTypeService.findAll();
+    }
 
     @GetMapping("/list")
     public String showAndSearch(@PageableDefault(value = 4) Pageable pageable, @RequestParam(value = "name", defaultValue = "") String name,
@@ -51,11 +59,11 @@ public class CustomerController {
     @PostMapping("/create")
     public String saveCreate(@Validated @ModelAttribute CustomerDto customerDto,
                              BindingResult bindingResult,
-//                             @PageableDefault(value = 4) Pageable pageable,
+                             @PageableDefault(value = 4) Pageable pageable,
                              Model model) {
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("customerTypes", customerTypeService.findAll());
+            model.addAttribute("customerType", customerTypeService.findAll());
             return "/customer/create";
         } else {
             Customer customer = new Customer();
@@ -70,7 +78,6 @@ public class CustomerController {
     public String showEditForm(@PathVariable int id, Model model) {
         Customer customer = customerService.findById(id);
         CustomerDto customerDto = new CustomerDto();
-        model.addAttribute("customerType", customerTypeService.findAll());
         BeanUtils.copyProperties(customer, customerDto);
         model.addAttribute("customerDto", customerDto);
         return "/customer/edit";
@@ -80,7 +87,6 @@ public class CustomerController {
     public String update(@ModelAttribute @Validated CustomerDto customerDto, BindingResult bindingResult, Model model) {
         new CustomerDto().validate(customerDto, bindingResult);
         if (bindingResult.hasErrors()) {
-            model.addAttribute("customerType", customerTypeService.findAll());
             return "/customer/edit";
         } else {
             Customer customer = new Customer();
@@ -103,5 +109,17 @@ public class CustomerController {
         customerService.save(customer);
 //            customerService.remove(customer.getId());
         return "redirect:/customer/list";
+    }
+
+
+    @GetMapping("/show")
+    public String showCustomerService(@PageableDefault(value = 4) Pageable pageable,
+                                      Model model) {
+
+        model.addAttribute("customers", customerService.findAllCustomerService(pageable));
+        model.addAttribute("customerTypeList", customerTypeService.findAll());
+        model.addAttribute("contracts", contractService.listContract());
+
+        return "/customer/list2";
     }
 }

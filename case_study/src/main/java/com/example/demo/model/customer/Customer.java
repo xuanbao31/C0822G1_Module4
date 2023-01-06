@@ -1,38 +1,48 @@
-package com.example.case_study.model.customer;
+package com.example.demo.model.customer;
 
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
+import com.example.demo.model.contract.Contract;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
-import javax.validation.constraints.*;
+import javax.persistence.*;
+import java.util.Set;
 
-public class CustomerDto implements Validator {
+@Entity
+public class Customer {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @NotBlank(message = "Không được để trống nha")
-    @Pattern(regexp = "([\\p{Lu}][\\p{Ll}]{1,8})(\\s([\\p{Lu}]|[\\p{Lu}][\\p{Ll}]{1,10})){0,5}$",
-            message = "Viết hoa ở mỗi chữ cái đầu")
     private String name;
-    @NotBlank(message = "Không được để trống nha")
     private String date;
-
     private Integer gender;
-    @NotBlank(message = "Không được để trống")
-    @Pattern(regexp = "^([0-9]{9}|[0-9]{12})$", message = "Nhập lại đi fen,đủ 9 hoặc 12")
     private String idCard;
-    @NotBlank(message = "Không được để trống")
-    @Pattern(regexp = "^(090|091|\\\\(84\\\\)\\\\+90|\\\\(84\\\\)\\\\+91)[0-9]{7}$",
-            message = "Số điện thoại phải đủ 10 số và phải bắt đầu bằng 090 or 091")
     private String phoneNumber;
-    @Email(message = "Nhập đúng định dạng email")
     private String email;
-    @NotBlank(message = "Không được để trống")
     private String address;
-
     private Integer status;
 
-
+    @ManyToOne
+    @JoinColumn(name = "customer_type_id", referencedColumnName = "id")
     private CustomerType customerType;
 
-    public CustomerDto() {
+    @JsonBackReference
+    @OneToMany(mappedBy = "customer")
+    private Set<Contract>contracts;
+
+    public Customer() {
+    }
+
+    public Customer(int id, String name, String date, Integer gender, String idCard, String phoneNumber, String email, String address, Integer status, CustomerType customerType, Set<Contract> contracts) {
+        this.id = id;
+        this.name = name;
+        this.date = date;
+        this.gender = gender;
+        this.idCard = idCard;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.status = status;
+        this.customerType = customerType;
+        this.contracts = contracts;
     }
 
     public int getId() {
@@ -115,14 +125,11 @@ public class CustomerDto implements Validator {
         this.customerType = customerType;
     }
 
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return false;
+    public Set<Contract> getContracts() {
+        return contracts;
     }
 
-
-    @Override
-    public void validate(Object target, Errors errors) {
-
+    public void setContracts(Set<Contract> contracts) {
+        this.contracts = contracts;
     }
 }

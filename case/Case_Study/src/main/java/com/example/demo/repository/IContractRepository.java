@@ -12,7 +12,7 @@ public interface IContractRepository extends JpaRepository<Contract, Integer> {
     @Query(value = "select * from `contract`   ", nativeQuery = true)
     Page<Contract> findAllContract(Pageable pageable);
 
-    @Query(value = "SELECT c.start_date as startDate,c.end_date as endDate,c.deposit as deposit,cu.name" +
+    @Query(value = "SELECT c.id, c.start_date as startDate,c.end_date as endDate,c.deposit as deposit,cu.name" +
             " as customerName,f.name as facilityName,(sum(ifnull(cd.quantity, 0) * ifnull(af.cost, 0)) + f.cost) " +
             "AS total" +
             " from `contract` c left join contract_detail cd on c.id = cd.contract_id " +

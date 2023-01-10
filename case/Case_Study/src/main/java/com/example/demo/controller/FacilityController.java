@@ -48,9 +48,12 @@ public class FacilityController {
 
     @GetMapping("/search")
     public String searchName(@PageableDefault(value = 2) Pageable pageable,
-                             @RequestParam String name,
+                             @RequestParam(name = "name") String name,
+                             @RequestParam(name = "facilityType") String facilityType,
                              Model model) {
-        model.addAttribute("facility", facilityService.findByName(pageable, name));
+        List<FacilityType> facilityTypeList = facilityTypeService.findAll();
+        model.addAttribute("facilityType", facilityTypeList);
+        model.addAttribute("facility", facilityService.findByName(pageable, name, facilityType));
         model.addAttribute("name", name);
         return "/facility/list";
     }
@@ -105,6 +108,7 @@ public class FacilityController {
         facilityService.save(facility);
         return "redirect:/facility/list";
     }
+
     @PostMapping("/delete")
     public String delete(@RequestParam(value = "deleteId") int facilityId) {
         facilityService.remove(facilityId);

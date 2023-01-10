@@ -95,4 +95,9 @@ public class ContractController {
         contractService.save(contract);
         return "redirect:/contract";
     }
+    @PostMapping("/attach")
+    public String saveAttach(@ModelAttribute("contractDetail") ContractDetail contractDetail) {
+        contractDetailService.save(contractDetail);
+        return "redirect:/contract";
+    }
 }

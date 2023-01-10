@@ -20,7 +20,7 @@ public class ContractDetailRestController {
     private IAttachFacilityService attachFacilityService;
 
     @GetMapping("{id}")
-    public ResponseEntity<List<AttachFacilityDto>> showAttach(@PathVariable Long id) {
+    public ResponseEntity<List<AttachFacilityDto>> showAttach(@PathVariable int id) {
         List<AttachFacilityDto> attachFacilityDto = attachFacilityService.findAllAttach(id);
         return new ResponseEntity<>(attachFacilityDto, HttpStatus.OK);
     }

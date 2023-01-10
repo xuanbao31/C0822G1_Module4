@@ -16,7 +16,7 @@ public interface IFacilityService {
 
     Facility findById(int id);
 
-    Page<Facility> findByName(Pageable pageable, String name);
+    Page<Facility> findByName(Pageable pageable, String name,String facilityType);
 
     List<Facility> showList();
 

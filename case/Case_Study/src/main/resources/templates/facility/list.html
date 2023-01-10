@@ -15,7 +15,11 @@
 <h1 style="text-align: center">Facility List</h1>
 <form th:action="@{/facility/search}" method="get">
     <input th:type="text" name="name" th:value="${name}">
-    <input th:type="submit" name="action" value="FindByName">
+    <select name="facilityType">
+        <option value="">--Choose--</option>
+        <option th:each="ft : ${facilityType}" th:value="${ft.name}" th:text="${ft.name}"></option>
+    </select>
+    <input th:type="submit" value="FindByName">
 </form>
 
 <table class="table table-primary">
@@ -25,6 +29,7 @@
         <th>Cost</th>
         <th>MaxPeople</th>
         <th>RentType</th>
+        <th>FacilityType</th>
         <th>Edit</th>
         <th>Delete</th>
     </tr>
@@ -34,6 +39,7 @@
         <td th:text="${facilities.cost}"></td>
         <td th:text="${facilities.maxPeople}"></td>
         <td th:text="${facilities.rentType.name}"></td>
+        <td th:text="${facilities.facilityType.name}"></td>
         <td><a class="btn btn-primary" th:href="@{/facility/{id}/edit(id=${facilities.id})}">Edit</a></td>
         <td>
             <button th:attr="onclick=|deleteFacility('${facilities.name}' ,'${facilities.id}')|"
